@@ -18,10 +18,10 @@ import android.view.View;
  */
 
 public class SonarView extends View {
-    private static final int SIDE_LENGTH = 100;
     DisplayMetrics mDisplayMetrics;
     int mHeight;
     int mWidth;
+
     public SonarView(Context context) {
         super(context);
         init(null);
@@ -43,41 +43,48 @@ public class SonarView extends View {
         super(context, attrs, defStyleAttr, defStyleRes);
         init(attrs);
     }
+
     private void init(@Nullable AttributeSet set) {
-         mDisplayMetrics= new DisplayMetrics();
-        ((Activity) getContext()).getWindowManager()
-                .getDefaultDisplay()
-                .getMetrics(mDisplayMetrics);
-        mHeight= mDisplayMetrics.heightPixels;
+        //Initializer Method
+
+
+        //Getting the height and width of the device
+        mDisplayMetrics = new DisplayMetrics();
+        ((Activity) getContext()).getWindowManager().getDefaultDisplay().getMetrics(mDisplayMetrics);
+        mHeight = mDisplayMetrics.heightPixels;
         mWidth = mDisplayMetrics.widthPixels;
 
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-       // super.onDraw(canvas);
-        int rectHeight = (int) (0.4*mHeight);
-        Rect rect = new Rect();
-        rect.left = 0;
-        rect.top = 0;
-        rect.right = rect.left + mWidth;
-        rect.bottom = rect.top +rectHeight;
-        //ba
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        Paint paintTwo = new Paint();
-        paintTwo.setColor(Color.GREEN);
+        super.onDraw(canvas);
 
-        paintTwo.setStyle(Paint.Style.STROKE);
-        //Circle Stroke Width
-        paintTwo.setStrokeWidth(5);
-        canvas.drawRect(rect,paint);
-        canvas.drawPoint(mWidth/2,rectHeight,paintTwo);
-        canvas.drawCircle(mWidth/2,rectHeight,100,paintTwo);
-        canvas.drawCircle(mWidth/2,rectHeight,200,paintTwo);
-        canvas.drawCircle(mWidth/2,rectHeight,300,paintTwo);
-        canvas.drawCircle(mWidth/2,rectHeight,400,paintTwo);
-        canvas.drawCircle(mWidth/2,rectHeight,500,paintTwo);
+        // Rectangle Drawing
+        int rectHeight = (int) (0.4 * mHeight); // Rectangle height to be 40% of the screen height
+        Rect rect = new Rect(); // Creating a rectangle object
+        rect.left = 0; // Setting the left edge to coordinate 0
+        rect.top = 0; // Setting the top edge  to coordinate 0
+        rect.right = rect.left + mWidth; // Setting the right edge
+        rect.bottom = rect.top + rectHeight; // Setting the bottom edge
+        Paint rectPaint = new Paint(); // Creating a Paint object
+        rectPaint.setColor(Color.BLACK); // Setting the color of the paint object from Color class constants
+        canvas.drawRect(rect, rectPaint); // Drawing the rectangle into the canvas by providing the rect object, and color object
+
+        //Circle Drawing
+        Paint circlePaint = new Paint(); // Creating a paint object for the circles
+        circlePaint.setColor(Color.GREEN); // Setting the color of the paint object from Color class constants
+        circlePaint.setStyle(Paint.Style.STROKE); // Setting the style of the paint, stroke to paint the circumference of the circle
+        circlePaint.setStrokeWidth(5); // Width of the stroke
+        //Drawing circles centered at coordinate X: WidthOfRectangle/2 , Y: HeightOfRectangle
+        canvas.drawCircle(mWidth / 2, rectHeight, 100, circlePaint); //Radius 100 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 200, circlePaint); //Radius 200 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 300, circlePaint); //Radius 300 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 400, circlePaint); //Radius 400 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 500, circlePaint); //Radius 500 pixels
+
+        // Drawing a point at coordinate X: WidthOfRectangle/2 , Y: HeightOfRectangle
+        canvas.drawPoint(mWidth / 2, rectHeight, circlePaint);
 
 
     }
