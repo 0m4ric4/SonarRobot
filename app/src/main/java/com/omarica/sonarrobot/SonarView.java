@@ -66,7 +66,11 @@ public class SonarView extends View {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         Paint paintTwo = new Paint();
-        paintTwo.setColor(Color.GREEN);
+        paintTwo.setColor(Color.RED);
+
+        Paint paintThree = new Paint();
+        paintThree.setColor(Color.GREEN);
+
         paintTwo.setStyle(Paint.Style.STROKE);
         paintTwo.setStrokeWidth(4);
         canvas.drawRect(rect,paint);
