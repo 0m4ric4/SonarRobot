@@ -62,14 +62,15 @@ public class SonarView extends View {
         rect.top = 0;
         rect.right = rect.left + mWidth;
         rect.bottom = rect.top +rectHeight;
-
+        //ba
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         Paint paintTwo = new Paint();
         paintTwo.setColor(Color.GREEN);
 
         paintTwo.setStyle(Paint.Style.STROKE);
-        paintTwo.setStrokeWidth(4);
+        //Circle Stroke Width
+        paintTwo.setStrokeWidth(5);
         canvas.drawRect(rect,paint);
         canvas.drawPoint(mWidth/2,rectHeight,paintTwo);
         canvas.drawCircle(mWidth/2,rectHeight,100,paintTwo);
@@ -77,6 +78,7 @@ public class SonarView extends View {
         canvas.drawCircle(mWidth/2,rectHeight,300,paintTwo);
         canvas.drawCircle(mWidth/2,rectHeight,400,paintTwo);
         canvas.drawCircle(mWidth/2,rectHeight,500,paintTwo);
+
 
     }
 }
