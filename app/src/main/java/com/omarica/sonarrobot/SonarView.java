@@ -67,7 +67,7 @@ public class SonarView extends View {
         paint.setColor(Color.BLACK);
         Paint paintTwo = new Paint();
         paintTwo.setColor(Color.RED);
-
+//////sample add
         Paint paintThree = new Paint();
         paintThree.setColor(Color.GREEN);
 
