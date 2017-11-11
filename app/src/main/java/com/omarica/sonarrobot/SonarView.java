@@ -5,6 +5,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.os.Build;
 import android.support.annotation.Nullable;
@@ -19,6 +20,9 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by omarica on 11/6/17.
  */
@@ -31,7 +35,10 @@ public class SonarView extends View {
     FirebaseDatabase mDatabase;
     DatabaseReference myRef;
     boolean isDrawLine = false;
+    boolean isDrawObject = false;
     long angle;
+    long objectDistance;
+    List<Point> mObjectsPoints;
     public SonarView(Context context) {
         super(context);
         init(null);
@@ -66,6 +73,8 @@ public class SonarView extends View {
 
         mDatabase = FirebaseDatabase.getInstance(); // Firebase database object
         myRef = mDatabase.getReference(); // Firebase database reference
+
+        mObjectsPoints = new ArrayList<>();
 
     }
 
@@ -103,12 +112,33 @@ public class SonarView extends View {
         linePaint.setColor(Color.GREEN);
         linePaint.setStrokeWidth(4);
 
+
         //If true, means angle has changed and a line is to be drawn
         if (isDrawLine) {
             drawLine(angle, canvas, linePaint);
             unDrawLine(angle - 1, canvas);
             isDrawLine = false;
         }
+
+
+        Paint objectPaint = new Paint();
+        objectPaint.setColor(Color.RED);
+        objectPaint.setStrokeWidth(8);
+
+        //Loops the list of objects
+        for (Point p : mObjectsPoints) { // Draws every point behind the line
+
+            drawObject(p, canvas, objectPaint);
+        }
+
+        if (isDrawObject) {
+            Point object = getXYfromAngle(angle, objectDistance); // gets XY coordinates of an object
+            mObjectsPoints.add(object); // Adds it to the list of objects
+            drawObject(object, canvas, objectPaint); // Draws the object
+            isDrawObject = false;
+        }
+        if (angle == 180 || angle == 0) // Clears points at 0 and 180 degrees
+            mObjectsPoints.clear();
 
 
         //Firebase Listeners
@@ -133,7 +163,9 @@ public class SonarView extends View {
         myRef.child("distance").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                long distance = (long) dataSnapshot.getValue();
+                objectDistance = (long) dataSnapshot.getValue();
+                isDrawObject = true;
+                invalidate();
 
             }
 
@@ -145,6 +177,25 @@ public class SonarView extends View {
 
     }
 
+    //Draws an object
+    private void drawObject(Point p, Canvas canvas, Paint paint) {
+
+        canvas.drawPoint(p.x, p.y, paint);
+
+    }
+
+    //Gets the XY coordinates of an object given its distance
+    private Point getXYfromAngle(long angle, long objectDistance) {
+        Point point = new Point();
+        double radians = Math.toRadians(angle);
+        float lineX = (float) ((500 - objectDistance) * Math.cos(radians)) + mWidth / 2;
+        float lineY = (float) ((500 - objectDistance) * Math.sin(-radians)) + rectHeight;
+        point.x = (int) lineX;
+        point.y = (int) lineY;
+        return point;
+
+
+    }
     // A function to draw a line given an angle, canvas, and paint
     private void drawLine(long angle, Canvas canvas, Paint paint) {
         double radians = Math.toRadians(angle);
