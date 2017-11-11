@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "667229313108",
+    "firebase_url": "https://sonarrobot-152dc.firebaseio.com",
+    "project_id": "sonarrobot-152dc",
+    "storage_bucket": "sonarrobot-152dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:667229313108:android:04559f699bc79f8c",
+        "android_client_info": {
+          "package_name": "com.omarica.sonarrobot"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "667229313108-tkmaoqunukm6rmbdfl4vif8ves6ifi1k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.omarica.sonarrobot",
+            "certificate_hash": "909bf5434631f9ecdd1cfe085c551d280e9b8657"
+          }
+        },
+        {
+          "client_id": "667229313108-1firlvmjfr9iu26nnfh64p8sctb85jqt.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDL0GUmQpShvbqJT8kiZC09PIOM51RvRFM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "667229313108-1firlvmjfr9iu26nnfh64p8sctb85jqt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
