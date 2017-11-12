@@ -124,7 +124,7 @@ public class SonarView extends View {
         Paint objectPaint = new Paint();
         objectPaint.setStrokeCap(Paint.Cap.ROUND);
         objectPaint.setColor(Color.RED);
-        objectPaint.setAlpha(3);
+        objectPaint.setAlpha(6);
         objectPaint.setAntiAlias(true);
         objectPaint.setStrokeWidth(40);
 
