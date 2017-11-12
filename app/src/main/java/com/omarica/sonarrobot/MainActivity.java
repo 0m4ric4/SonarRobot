@@ -13,6 +13,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        JoystickView joystick = new JoystickView(this); // Joystick
         setContentView(R.layout.activity_main);
         mSonarView = findViewById(R.id.sonarView); // Initializing the SonarView object
         // Getting screen width and height
@@ -22,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         screenWidth = metrics.widthPixels;
         rectHeight = (float) (0.4 * screenHeight);
         mSonarView.getLayoutParams().height = (int) (0.4 * screenHeight); // Setting the SonarView's height to 40% of the screen height
+
 
 
     }
