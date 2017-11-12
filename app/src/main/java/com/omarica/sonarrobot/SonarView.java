@@ -116,14 +116,17 @@ public class SonarView extends View {
         //If true, means angle has changed and a line is to be drawn
         if (isDrawLine) {
             drawLine(angle, canvas, linePaint);
-            unDrawLine(angle - 1, canvas);
+            //unDrawLine(angle - 1, canvas);
             isDrawLine = false;
         }
 
 
         Paint objectPaint = new Paint();
+        objectPaint.setStrokeCap(Paint.Cap.ROUND);
         objectPaint.setColor(Color.RED);
-        objectPaint.setStrokeWidth(8);
+        objectPaint.setAlpha(3);
+        objectPaint.setAntiAlias(true);
+        objectPaint.setStrokeWidth(40);
 
         //Loops the list of objects
         for (Point p : mObjectsPoints) { // Draws every point behind the line
@@ -188,8 +191,8 @@ public class SonarView extends View {
     private Point getXYfromAngle(long angle, long objectDistance) {
         Point point = new Point();
         double radians = Math.toRadians(angle);
-        float lineX = (float) ((500 - objectDistance) * Math.cos(radians)) + mWidth / 2;
-        float lineY = (float) ((500 - objectDistance) * Math.sin(-radians)) + rectHeight;
+        float lineX = (float) ((objectDistance) * Math.cos(radians)) + mWidth / 2;
+        float lineY = (float) ((objectDistance) * Math.sin(-radians)) + rectHeight;
         point.x = (int) lineX;
         point.y = (int) lineY;
         return point;
@@ -207,11 +210,11 @@ public class SonarView extends View {
 
     // A function to un draw a line given an angle, canvas, and paint
 
-    private void unDrawLine(long angle, Canvas canvas) {
+   /* private void unDrawLine(long angle, Canvas canvas) {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         drawLine(angle, canvas, paint);
-    }
+    } */
 
 
 }
