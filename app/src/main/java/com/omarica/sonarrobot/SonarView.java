@@ -83,7 +83,7 @@ public class SonarView extends View {
 
         //super.onDraw(canvas);
         // Rectangle Drawing
-        rectHeight = (int) (0.4 * mHeight); // Rectangle height to be 40% of the screen height
+        rectHeight = (int) (0.35 * mHeight); // Rectangle height to be 40% of the screen height
         Rect rect = new Rect(); // Creating a rectangle object
         rect.left = 0; // Setting the left edge to coordinate 0
         rect.top = 0; // Setting the top edge  to coordinate 0
