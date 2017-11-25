@@ -112,6 +112,12 @@ public class SonarView extends View {
         linePaint.setColor(Color.GREEN);
         linePaint.setStrokeWidth(4);
 
+        Paint bottomLinePaint = new Paint();
+        bottomLinePaint.setColor(Color.GREEN);
+        bottomLinePaint.setStrokeWidth(8);
+        Point p0 = getXYfromAngle(0, 500);
+        Point p180 = getXYfromAngle(180, 500);
+        canvas.drawLine(p0.x, p0.y, p180.x, p180.y, bottomLinePaint);
 
         //If true, means angle has changed and a line is to be drawn
         if (isDrawLine) {

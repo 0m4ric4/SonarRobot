@@ -17,6 +17,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@+id/sonarView"
+        android:background="@android:color/black"
         android:orientation="vertical"
         >
 
@@ -27,11 +28,11 @@
             android:layout_height="match_parent"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            custom:JV_backgroundColor="#009688"
-            custom:JV_borderColor="#00796B"
+            custom:JV_backgroundColor="#b4c7c5"
+            custom:JV_borderColor="#6c6c6c"
             custom:JV_borderWidth="3dp"
-            custom:JV_buttonColor="#FF6E40"
-            custom:JV_buttonSizeRatio="20%"
+            custom:JV_buttonColor="#3a684a"
+            custom:JV_buttonSizeRatio="25%"
             custom:JV_fixedCenter="false"/>
     </RelativeLayout>
 
