@@ -39,6 +39,16 @@ public class SonarView extends View {
     long angle;
     long objectDistance;
     List<Point> mObjectsPoints;
+    Paint objectPaint;
+    Paint circlePaint;
+    Point p0;
+    Point p180;
+    Rect rect;
+    Paint rectPaint;
+    Paint linePaint;
+    Paint bottomLinePaint;
+    Point object = null;
+
     public SonarView(Context context) {
         super(context);
         init(null);
@@ -76,79 +86,44 @@ public class SonarView extends View {
 
         mObjectsPoints = new ArrayList<>();
 
-    }
+        //Object Paint
+        objectPaint = new Paint();
+        objectPaint.setStrokeCap(Paint.Cap.ROUND);
+        objectPaint.setColor(Color.RED);
+        objectPaint.setAlpha(70);
+        objectPaint.setAntiAlias(true);
+        objectPaint.setStrokeWidth(60);
 
-    @Override
-    protected void onDraw(Canvas canvas) {
+        //Circle Paint
+        circlePaint = new Paint(); // Creating a paint object for the circles
+        circlePaint.setColor(Color.GREEN); // Setting the color of the paint object from Color class constants
+        circlePaint.setStyle(Paint.Style.STROKE); // Setting the style of the paint, stroke to paint the circumference of the circle
+        circlePaint.setStrokeWidth(8); // Width of the stroke
+        circlePaint.setAntiAlias(true);
+        p0 = getXYfromAngle(0, 500);
+        p180 = getXYfromAngle(180, 500);
 
-        //super.onDraw(canvas);
-        // Rectangle Drawing
+        //Rectangle
         rectHeight = (int) (0.35 * mHeight); // Rectangle height to be 40% of the screen height
-        Rect rect = new Rect(); // Creating a rectangle object
+        rect = new Rect(); // Creating a rectangle object
         rect.left = 0; // Setting the left edge to coordinate 0
         rect.top = 0; // Setting the top edge  to coordinate 0
         rect.right = rect.left + mWidth; // Setting the right edge
         rect.bottom = rect.top + rectHeight; // Setting the bottom edge
-        Paint rectPaint = new Paint(); // Creating a Paint object
+        rectPaint = new Paint(); // Creating a Paint object
         rectPaint.setColor(Color.BLACK); // Setting the color of the paint object from Color class constants
-        canvas.drawRect(rect, rectPaint); // Drawing the rectangle into the canvas by providing the rect object, and color object
 
-        //Circle Drawing
-        Paint circlePaint = new Paint(); // Creating a paint object for the circles
-        circlePaint.setColor(Color.GREEN); // Setting the color of the paint object from Color class constants
-        circlePaint.setStyle(Paint.Style.STROKE); // Setting the style of the paint, stroke to paint the circumference of the circle
-        circlePaint.setStrokeWidth(5); // Width of the stroke
-        //Drawing circles centered at coordinate X: WidthOfRectangle/2 , Y: HeightOfRectangle
-        canvas.drawCircle(mWidth / 2, rectHeight, 100, circlePaint); //Radius 100 pixels
-        canvas.drawCircle(mWidth / 2, rectHeight, 200, circlePaint); //Radius 200 pixels
-        canvas.drawCircle(mWidth / 2, rectHeight, 300, circlePaint); //Radius 300 pixels
-        canvas.drawCircle(mWidth / 2, rectHeight, 400, circlePaint); //Radius 400 pixels
-        canvas.drawCircle(mWidth / 2, rectHeight, 500, circlePaint); //Radius 500 pixels
 
-        // Drawing a point at coordinate X: WidthOfRectangle/2 , Y: HeightOfRectangle
-        canvas.drawPoint(mWidth / 2, rectHeight, circlePaint);
-        // Draw Line
-        Paint linePaint = new Paint();
+        //Line Paint
+        linePaint = new Paint();
         linePaint.setColor(Color.GREEN);
-        linePaint.setStrokeWidth(4);
+        linePaint.setStrokeWidth(8);
+        linePaint.setAntiAlias(true);
 
-        Paint bottomLinePaint = new Paint();
+        bottomLinePaint = new Paint();
         bottomLinePaint.setColor(Color.GREEN);
-        bottomLinePaint.setStrokeWidth(8);
-        Point p0 = getXYfromAngle(0, 500);
-        Point p180 = getXYfromAngle(180, 500);
-        canvas.drawLine(p0.x, p0.y, p180.x, p180.y, bottomLinePaint);
-
-        //If true, means angle has changed and a line is to be drawn
-        if (isDrawLine) {
-            drawLine(angle, canvas, linePaint);
-            //unDrawLine(angle - 1, canvas);
-            isDrawLine = false;
-        }
-
-
-        Paint objectPaint = new Paint();
-        objectPaint.setStrokeCap(Paint.Cap.ROUND);
-        objectPaint.setColor(Color.RED);
-        objectPaint.setAlpha(6);
-        objectPaint.setAntiAlias(true);
-        objectPaint.setStrokeWidth(40);
-
-        //Loops the list of objects
-        for (Point p : mObjectsPoints) { // Draws every point behind the line
-
-            drawObject(p, canvas, objectPaint);
-        }
-
-        if (isDrawObject) {
-            Point object = getXYfromAngle(angle, objectDistance); // gets XY coordinates of an object
-            mObjectsPoints.add(object); // Adds it to the list of objects
-            drawObject(object, canvas, objectPaint); // Draws the object
-            isDrawObject = false;
-        }
-        if (angle == 180 || angle == 0) // Clears points at 0 and 180 degrees
-            mObjectsPoints.clear();
-
+        bottomLinePaint.setStrokeWidth(16);
+        bottomLinePaint.setAntiAlias(true);
 
         //Firebase Listeners
         //Listens to changes in the angle
@@ -158,6 +133,7 @@ public class SonarView extends View {
 
                 angle = (long) dataSnapshot.getValue(); // Retrieve angle from database
                 isDrawLine = true; // Used in onDraw()
+                //postInvalidate();
                 invalidate(); // Calls onDraw() again
 
 
@@ -174,6 +150,7 @@ public class SonarView extends View {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 objectDistance = (long) dataSnapshot.getValue();
                 isDrawObject = true;
+                //postInvalidate();
                 invalidate();
 
             }
@@ -183,6 +160,58 @@ public class SonarView extends View {
 
             }
         });
+
+    }
+
+
+    @Override
+    protected void onDraw(Canvas canvas) {
+        // canvas.save();
+        super.onDraw(canvas);
+        // Rectangle Drawing
+
+        canvas.drawRect(rect, rectPaint); // Drawing the rectangle into the canvas by providing the rect object, and color object
+
+        //Circle Drawing
+        //Drawing circles centered at coordinate X: WidthOfRectangle/2 , Y: HeightOfRectangle
+        canvas.drawCircle(mWidth / 2, rectHeight, 100, circlePaint); //Radius 100 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 200, circlePaint); //Radius 200 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 300, circlePaint); //Radius 300 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 400, circlePaint); //Radius 400 pixels
+        canvas.drawCircle(mWidth / 2, rectHeight, 500, circlePaint); //Radius 500 pixels
+
+        // Drawing a point at coordinate X: WidthOfRectangle/2 , Y: HeightOfRectangle
+        canvas.drawPoint(mWidth / 2, rectHeight, circlePaint);
+        // Draw Line
+
+        canvas.drawLine(p0.x, p0.y + (rectHeight), p180.x, p180.y + (rectHeight), bottomLinePaint);
+
+        //If true, means angle has changed and a line is to be drawn
+        if (isDrawLine) {
+            drawLine(angle, canvas, linePaint);
+            isDrawLine = false;
+        }
+
+
+        //Loops the list of objects
+
+        for (Point p : mObjectsPoints) { // Draws every point behind the line
+
+            drawObject(p, canvas, objectPaint);
+        }
+
+
+        if (isDrawObject) {
+            object = getXYfromAngle(angle, objectDistance); // gets XY coordinates of an object
+            mObjectsPoints.add(object);
+            drawObject(object, canvas, objectPaint); // Draws the object
+            isDrawObject = false;
+        }
+        if (angle == 180 || angle == 0) {// Clears points at 0 and 180 degrees
+            mObjectsPoints.clear();
+
+        }
+
 
     }
 
@@ -205,6 +234,7 @@ public class SonarView extends View {
 
 
     }
+
     // A function to draw a line given an angle, canvas, and paint
     private void drawLine(long angle, Canvas canvas, Paint paint) {
         double radians = Math.toRadians(angle);
@@ -213,15 +243,6 @@ public class SonarView extends View {
 
         canvas.drawLine(mWidth / 2, rectHeight, lineX, lineY, paint);
     }
-
-    // A function to un draw a line given an angle, canvas, and paint
-
-   /* private void unDrawLine(long angle, Canvas canvas) {
-        Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
-        drawLine(angle, canvas, paint);
-    } */
-
 
 }
 

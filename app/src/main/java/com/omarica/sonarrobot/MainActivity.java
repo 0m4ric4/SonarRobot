@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     float rectHeight;
     FirebaseDatabase mDatabase;
     DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,17 +33,13 @@ public class MainActivity extends AppCompatActivity {
         screenHeight = metrics.heightPixels;
         screenWidth = metrics.widthPixels;
         rectHeight = (float) (0.35 * screenHeight);
-        mSonarView.getLayoutParams().height = (int) (0.35 * screenHeight); // Setting the SonarView's height to 40% of the screen height
+        mSonarView.getLayoutParams().height = (int) (0.35 * screenHeight); // Setting the SonarView's height to 35% of the screen height
 
-        mJoystickParentView.getLayoutParams().height = (int) (0.65 * screenHeight);
+        mJoystickParentView.getLayoutParams().height = (int) (0.65 * screenHeight);// Setting the JoystickView's height to 65% of the screen height
         mJoystickParentView.getLayoutParams().width = (int) (0.65 * screenHeight);
-
-        // mJoystickView.getLayoutParams().height = (int) (0.65 * screenHeight);
-        // mJoystickView.getLayoutParams().width = (int) (0.65 * screenHeight);
 
         mDatabase = FirebaseDatabase.getInstance(); // Firebase database object
         myRef = mDatabase.getReference(); // Firebase database reference
-
 
         mJoystickView.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
@@ -52,9 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 myRef.child("joystickStrength").setValue(strength);
 
             }
-        });
-
-
+        }, 10);
 
 
     }
