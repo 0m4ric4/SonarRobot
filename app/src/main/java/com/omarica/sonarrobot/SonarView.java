@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 
 import com.google.firebase.database.DataSnapshot;
@@ -28,6 +29,7 @@ import java.util.List;
  */
 
 public class SonarView extends View {
+    private static final String ANGLE_TAG = "angle_tag";
     DisplayMetrics mDisplayMetrics;
     int mHeight;
     int mWidth;
@@ -38,6 +40,7 @@ public class SonarView extends View {
     boolean isDrawObject = false;
     long angle;
     long objectDistance;
+    List<Long> angleList;
     List<Point> mObjectsPoints;
     Paint objectPaint;
     Paint circlePaint;
@@ -48,6 +51,8 @@ public class SonarView extends View {
     Paint linePaint;
     Paint bottomLinePaint;
     Point object = null;
+    String direction;
+    boolean isAngleCorrect = false;
 
     public SonarView(Context context) {
         super(context);
@@ -85,7 +90,7 @@ public class SonarView extends View {
         myRef = mDatabase.getReference(); // Firebase database reference
 
         mObjectsPoints = new ArrayList<>();
-
+        angleList = new ArrayList<>();
         //Object Paint
         objectPaint = new Paint();
         objectPaint.setStrokeCap(Paint.Cap.ROUND);
@@ -119,7 +124,6 @@ public class SonarView extends View {
         linePaint.setColor(Color.GREEN);
         linePaint.setStrokeWidth(8);
         linePaint.setAntiAlias(true);
-
         bottomLinePaint = new Paint();
         bottomLinePaint.setColor(Color.GREEN);
         bottomLinePaint.setStrokeWidth(16);
@@ -127,6 +131,18 @@ public class SonarView extends View {
 
         //Firebase Listeners
         //Listens to changes in the angle
+
+        myRef.child("direction").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                direction = (String) dataSnapshot.getValue();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         myRef.child("angle").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -152,7 +168,6 @@ public class SonarView extends View {
                 isDrawObject = true;
                 //postInvalidate();
                 invalidate();
-
             }
 
             @Override
@@ -188,7 +203,37 @@ public class SonarView extends View {
 
         //If true, means angle has changed and a line is to be drawn
         if (isDrawLine) {
-            drawLine(angle, canvas, linePaint);
+            // check if angle is not in the list
+            if (angleList.size() > 0) {
+                if (direction.equals("anticlockwise"))
+                    isAngleCorrect = (angle > angleList.get(angleList.size() - 1));
+                else if (direction.equals("clockwise"))
+                    isAngleCorrect = (angle < angleList.get(angleList.size() - 1));
+            }
+
+
+           /* if(angleList.size() > 1) {
+                 isAngleCorrect = ( (angleList.get(angleList.size()-1) > angle)
+                        && (angleList.get(angleList.size()-2) > angle) ) ||
+                ( (angleList.get(angleList.size()-1) < angle)
+                        && (angleList.get(angleList.size()-2) <  angle) );
+            } */
+           /* if(angleList.size() != 0) {
+                isAngleCorrect = (angleList.get(angleList.size()-1) > angle)
+                        && (angleList.get(angleList.size()-2) > angle);
+            }*/
+
+
+            Log.d(ANGLE_TAG, String.valueOf(isAngleCorrect));
+            if (isAngleCorrect) {
+                drawLine(angle, canvas, linePaint);
+
+            }
+            angleList.add(angle);
+
+
+            //Add angle to the list
+
             isDrawLine = false;
         }
 
@@ -209,6 +254,7 @@ public class SonarView extends View {
         }
         if (angle == 180 || angle == 0) {// Clears points at 0 and 180 degrees
             mObjectsPoints.clear();
+            angleList.clear();
 
         }
 
