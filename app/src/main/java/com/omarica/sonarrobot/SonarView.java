@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by omarica on 11/6/17.
@@ -51,7 +52,10 @@ public class SonarView extends View {
     Paint linePaint;
     Paint bottomLinePaint;
     Point object = null;
+    Paint textPaint;
     String direction;
+    int green = Color.parseColor("#00C853");
+    int red = Color.parseColor("#F44336");
     boolean isAngleCorrect = false;
 
     public SonarView(Context context) {
@@ -101,7 +105,7 @@ public class SonarView extends View {
 
         //Circle Paint
         circlePaint = new Paint(); // Creating a paint object for the circles
-        circlePaint.setColor(Color.GREEN); // Setting the color of the paint object from Color class constants
+        circlePaint.setColor(green); // Setting the color of the paint object from Color class constants
         circlePaint.setStyle(Paint.Style.STROKE); // Setting the style of the paint, stroke to paint the circumference of the circle
         circlePaint.setStrokeWidth(8); // Width of the stroke
         circlePaint.setAntiAlias(true);
@@ -121,13 +125,20 @@ public class SonarView extends View {
 
         //Line Paint
         linePaint = new Paint();
-        linePaint.setColor(Color.GREEN);
+        linePaint.setColor(green);
         linePaint.setStrokeWidth(8);
         linePaint.setAntiAlias(true);
         bottomLinePaint = new Paint();
-        bottomLinePaint.setColor(Color.GREEN);
+        bottomLinePaint.setColor(green);
         bottomLinePaint.setStrokeWidth(16);
         bottomLinePaint.setAntiAlias(true);
+
+        textPaint = new Paint();
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextLocale(Locale.US);
+        textPaint.setTextSize(48);
+
 
         //Firebase Listeners
         //Listens to changes in the angle
@@ -164,7 +175,12 @@ public class SonarView extends View {
         myRef.child("distance").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
                 objectDistance = (long) dataSnapshot.getValue();
+                if (objectDistance > 3)
+                    objectDistance -= 4;
+                if (objectDistance > 500)
+                    objectDistance = 500;
                 isDrawObject = true;
                 //postInvalidate();
                 invalidate();
@@ -187,6 +203,8 @@ public class SonarView extends View {
 
         canvas.drawRect(rect, rectPaint); // Drawing the rectangle into the canvas by providing the rect object, and color object
 
+        canvas.drawText("Distance: " + objectDistance + " cm", 20, 75, textPaint);
+        canvas.drawText("Angle: " + angle + "°", mWidth - 250, 75, textPaint);
         //Circle Drawing
         //Drawing circles centered at coordinate X: WidthOfRectangle/2 , Y: HeightOfRectangle
         canvas.drawCircle(mWidth / 2, rectHeight, 100, circlePaint); //Radius 100 pixels
@@ -247,12 +265,14 @@ public class SonarView extends View {
 
 
         if (isDrawObject) {
-            object = getXYfromAngle(angle, objectDistance); // gets XY coordinates of an object
-            mObjectsPoints.add(object);
-            drawObject(object, canvas, objectPaint); // Draws the object
-            isDrawObject = false;
+            if (objectDistance < 500) {
+                object = getXYfromAngle(angle, objectDistance); // gets XY coordinates of an object
+                mObjectsPoints.add(object);
+                drawObject(object, canvas, objectPaint); // Draws the object
+                isDrawObject = false;
+            }
         }
-        if (angle == 180 || angle == 0) {// Clears points at 0 and 180 degrees
+        if (angle == 180 || angle == 0 || angle == 179 || angle == 1) {// Clears points at 0 and 180 degrees
             mObjectsPoints.clear();
             angleList.clear();
 
