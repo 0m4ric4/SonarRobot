@@ -29,6 +29,7 @@
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             custom:JV_backgroundColor="#b4c7c5"
+
             custom:JV_borderColor="#6c6c6c"
             custom:JV_borderWidth="3dp"
             custom:JV_buttonColor="#3a684a"
@@ -36,5 +37,5 @@
             custom:JV_fixedCenter="false"/>
     </RelativeLayout>
 
-
+    <!-- b4c7c5 -->
 </RelativeLayout>

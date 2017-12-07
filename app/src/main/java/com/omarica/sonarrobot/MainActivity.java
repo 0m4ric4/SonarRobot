@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 myRef.child("joystickStrength").setValue(strength);
 
             }
-        }, 10);
+        }, 80);
 
 
     }
