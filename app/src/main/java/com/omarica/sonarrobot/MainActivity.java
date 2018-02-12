@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        JoystickView joystick = new JoystickView(this); // Joystick
         setContentView(R.layout.activity_main);
         mSonarView = findViewById(R.id.sonarView); // Initializing the SonarView object
         mJoystickView = findViewById(R.id.joystickView);
@@ -50,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         }, 80);
+
 
 
     }
