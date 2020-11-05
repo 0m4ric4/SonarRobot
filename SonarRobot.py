@@ -5,10 +5,10 @@ import pigpio
 import _thread
 
 config = {
-    "apiKey": "AIzaSyC8N96YrS-ardGy6OIef6hcVYeXS7ml7mc",
-    "authDomain": "sonarrobot-152dc.firebaseapp.com",
-    "databaseURL": "https://sonarrobot-152dc.firebaseio.com",
-    "storageBucket": "sonarrobot-152dc.appspot.com"
+    "apiKey": "",
+    "authDomain": "",
+    "databaseURL": "",
+    "storageBucket": ""
 
 }
 
