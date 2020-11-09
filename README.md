@@ -7,7 +7,7 @@ Sonar Robot is a project that aims to explore the surrounding environment with a
 
 The robot hardware is set up using a Raspberry Pi 3, and an Android application is used for controlling the mobile robot and monitoring the enivornment
 
-Distances to nearby obstacles are measured using a sonar waves, and distance is visually scaled up to a specific precision at the software level 
+Distances to nearby obstacles are measured using sonar waves, and distance is visually scaled up to a specific precision at the software level 
 
 Multithreading is used to de-couple database interaction from obstacle detection, achieving smooth interaction.
 
